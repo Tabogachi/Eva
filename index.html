@@ -4,19 +4,28 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width" />
-    <title>Lion</title>
+    <title>Eva</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   </head>
-
   <body>
-    <h1>Lion Voice assistant</h1>
+    <div class = "evaWrapper"></div>
+    <div class = "wrapper">
+      
+      <div class = "response" id = "response">
+        <div class = "responseContent" id = "responseContent"><span></span></div>
+        <h1 class = "responseText" id = "responseText"></h1>
+      </div>
 
-    
+        <button class = "eva" onClick="jQuery(this).toggleClass('active')"></button>
 
-    <div>
-      <p class="output"><em>...diagnostic messages</em></p>
-    </div>
-
-    <script src="voice.js"></script>
+        <div >
+          <p class="output" id = "output">
+            <span class = "quote" id = "quote">"</span>
+            Click on Eva and say something...
+          <span class = "quote" id = "quote">"</span></p>
+        </div>
+    </div>  
+    <script src="eva.js"></script>
   </body>
 </html>
