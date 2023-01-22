@@ -3,7 +3,7 @@
 const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 const SpeechGrammarList = window.SpeechGrammarList || webkitSpeechGrammarList;
 const SpeechRecognitionEvent = window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
-
+ 
 
 //define speech recognition
 const recognition = new SpeechRecognition();
@@ -59,35 +59,18 @@ recognition.onresult = (event) => {
     //variables for user input
     var interim_transcript = '';
     final_transcript = '';
-
+    console.log("HBDJHSBAJBDASJH")
     //sorts out the voice recognition alternatives until it gets a final result
     for (var i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
             final_transcript += event.results[i][0].transcript; //gets the final result and adds it to final_transcript variable //converts to lowercase
-            matchCommand(); //matches with built in commands (w.i.p.)
-            console.log(final_transcript)
-
-            final_transcript = capitalize(final_transcript)
-
-            //variables for output and final transcript
-            const myText = htmlOutput.textContent;
-            const voiceText = final_transcript;
-            output = document.getElementById("output");
-        
-               output.textContent = '';
-               output.appendChild(mySpan); // append the empty span
-               mySpan.textContent = '" ';
-               mySpan.classList.add("quote");
-               output.innerHTML += voiceText; //outputs the final_transcript
-               output.appendChild(mySpan); // append the empty span again
-               mySpan.textContent = ' "';
-               mySpan.classList.add("quote");
-
+            processResults();
         } else {
             //default
             interim_transcript += event.results[i][0].transcript;
         }
     }
+
 
  }
 
@@ -191,12 +174,34 @@ function getCats() {
 }
 
 
+function processResults() {
+    matchCommand(); //matches with built in commands (w.i.p.)
+    console.log(final_transcript)
+
+    final_transcript = capitalize(final_transcript)
+
+    //variables for output and final transcript
+    const myText = htmlOutput.textContent;
+    const voiceText = final_transcript;
+    output = document.getElementById("output");
+
+       output.textContent = '';
+       output.appendChild(mySpan); // append the empty span
+       mySpan.textContent = '" ';
+       mySpan.classList.add("quote");
+       output.innerHTML += voiceText; //outputs the final_transcript
+       output.appendChild(mySpan); // append the empty span again
+       mySpan.textContent = ' "';
+       mySpan.classList.add("quote");
+}
+
 
 /*
 SPEECH SYNTHESIS STARTS HERE
 */
 
 function evaSpeaks() {
+    recognition.stop()
     var msg = new SpeechSynthesisUtterance();
     var voices = window.speechSynthesis.getVoices();
 
@@ -218,34 +223,39 @@ function evaSpeaks() {
     }   
 
     responseLength = countWords();
-    
 
-    var i = 1;                  //  set your counter to 1
+    var x = 0;
+    var intervalID = setInterval(function () {
 
-    function myLoop() {         //  create a loop function
-    setTimeout(function() {   //  call a 3s setTimeout when the loop is called
-            var evaWrapper = document.querySelector(".evaWrapper")
+        $('.evaWrapper').addClass('talking');
+        console.log('added');
 
-            evaWrapper.classList.add('talking');
-            evaWrapper.classList.remove('talking');   //  your code here
-            i++;                    //  increment the counter
-            if (i < responseLength) {           //  if the counter < 10, call the loop function
-            myLoop();             //  ..  again which will trigger another 
-            }                       //  ..  setTimeout()
-        }, 3000)
-    }
-    myLoop(); 
-    
+        if (++x === responseLength) {
+            window.clearInterval(intervalID);
+            console.log("finished 1");
+        }
+    }, 400);
 
-    for (let i = 0; i < responseLength; i++){
+    var y = 0;
+    var intervalID2 = setInterval(function () {
 
-    }
-    
+        $('.evaWrapper').removeClass('talking');
+        console.log('removed');
+
+        if (++y === responseLength) {
+            window.clearInterval(intervalID2);
+            console.log("finished 2");
+                recognition.start();
+        }
+    }, 800);
+
 
     msg.onend = function(e) {
         console.log('Eva spoke');
     };
 
+
+    evaResponse = '';
 }
 
 function onOffGlow() {
